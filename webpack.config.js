@@ -1,14 +1,8 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: './src/index.js',
     plugins: [
-        new HtmlWebpackPlugin(
-            {
-                template: './src/index.html'
-            }
-        ),
         new MiniCssExtractPlugin()
     ],
     module: {
@@ -17,21 +11,20 @@ module.exports = {
                 test: /\.(scss|sass)$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    "style-loader",
                     "css-loader",
                     "sass-loader"
                 ]
             },
             {
-                test: /\.m?js$/,
+                test: /\.js$|jsx/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react']
+                        presets: ['@babel/preset-react','@babel/preset-env']
                     }
                 },
             }
         ]
-    }
+    },
 }
