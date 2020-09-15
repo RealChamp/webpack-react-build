@@ -8,6 +8,8 @@ const TerserWebpackPlugin = require('terser-webpack-plugin')
 
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
 
 const optimization = () => {
     const config = {
@@ -29,6 +31,33 @@ const optimization = () => {
     return config
 }
 
+const getStyleLoaders = (options) => {
+  const loaders = [
+    {
+      loader: MiniCssExtractPlugin.loader,
+      options: {
+        hmr: isDev,
+        reloadAll: isDev,
+      },
+    },
+    {
+      loader: 'css-loader',
+      options: options
+    },
+    {
+      loader: 'postcss-loader',
+      options: {
+        postcssOptions: {
+          plugins: [
+            'autoprefixer'
+          ]
+        }
+      }
+    }
+  ]
+  return loaders
+}
+
 module.exports = {
   entry: {
     main: './src/index.js',
@@ -43,7 +72,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      filename: 'index.[hash].html',
       minify: {
         collapseWhitespace: isProd,
       },
@@ -53,33 +81,17 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: isDev,
-              reloadAll: isDev,
-            },
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              importLoaders: 1,
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  'autoprefixer'
-                ]
-              }
-            }
-          }
-        ],
+        test: cssRegex,
+        exclude: cssModuleRegex,
+        use: getStyleLoaders({
+          importLoaders: 1
+        })
+      },
+      {
+        test: cssModuleRegex,
+        use: getStyleLoaders({
+          modules: true,
+        })
       },
       {
         test: /\.(js|jsx)/,
@@ -106,7 +118,7 @@ module.exports = {
   },
   optimization: optimization(),
   devServer: {
-    port: 3000,
+    port: 8000,
     hot: isDev,
   },
 };
