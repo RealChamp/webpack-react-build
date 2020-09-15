@@ -2,15 +2,40 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const TerserWebpackPlugin = require('terser-webpack-plugin')
+// const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 
+const optimization = () => {
+    const config = {
+      splitChunks: {
+        chunks: 'all',
+      },
+    };
+    if (isProd) {
+      config.minimizer = [new OptimizeCssAssetsWebpackPlugin(), new TerserWebpackPlugin({
+          extractComments: false,
+          terserOptions: {
+            output: {
+              comments: false
+            }
+          }
+      })];
+    }
+
+    return config
+}
+
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    main: './src/index.js',
+  },
   output: {
-      filename: 'bundle.js',
-      path: path.resolve(__dirname, 'dist')
+    filename: '[name].[hash].js',
+    path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new MiniCssExtractPlugin({
@@ -18,19 +43,43 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      filename: 'index.[hash].html',
+      minify: {
+        collapseWhitespace: isProd,
+      },
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
   ],
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, {
-          loader: 'css-loader',
-          options: {
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: isDev,
+              reloadAll: isDev,
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: {
               modules: true,
-          }  
-        }],
+              importLoaders: 1,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  'autoprefixer'
+                ]
+              }
+            }
+          }
+        ],
       },
       {
         test: /\.(js|jsx)/,
@@ -55,7 +104,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
   },
+  optimization: optimization(),
   devServer: {
     port: 3000,
+    hot: isDev,
   },
 };
