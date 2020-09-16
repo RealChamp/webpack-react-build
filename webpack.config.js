@@ -58,22 +58,6 @@ const getStyleLoaders = (options) => {
   return loaders
 }
 
-const jsLoaders = () => {
-  const loaders = [
-    {
-      loader: 'babel-loader',
-      options: {
-        presets: ['@babel/preset-react', '@babel/preset-env'],
-      }
-    }
-  ]
-
-  if (isDev) {
-    loaders.push('eslint-loader')
-  }
-  
-  return loaders
-}
 
 module.exports = {
   entry: {
@@ -115,7 +99,20 @@ module.exports = {
       {
         test: /\.(js|jsx)/,
         exclude: /(node_modules|bower_components)/,
-        use: jsLoaders()
+        use: [
+          {
+            loader: 'babel-loader',
+            options:  {
+              presets: ['@babel/preset-env', '@babel/preset-react'],
+            }
+          },
+          'eslint-loader'
+        ],
+      },
+      {
+        test: /\.(ts|tsx)/,
+        use: 'ts-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.(png|jpe?g|svg|gif)/,
@@ -128,7 +125,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', 'ts', 'tsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   optimization: optimization(),
   devServer: {
