@@ -58,6 +58,23 @@ const getStyleLoaders = (options) => {
   return loaders
 }
 
+const jsLoaders = () => {
+  const loaders = [
+    {
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-react', '@babel/preset-env'],
+      }
+    }
+  ]
+
+  if (isDev) {
+    loaders.push('eslint-loader')
+  }
+  
+  return loaders
+}
+
 module.exports = {
   entry: {
     main: './src/index.js',
@@ -72,8 +89,10 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      inject: true,
       minify: {
         collapseWhitespace: isProd,
+        removeComments: isProd
       },
     }),
     new CleanWebpackPlugin(),
@@ -96,12 +115,7 @@ module.exports = {
       {
         test: /\.(js|jsx)/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-react', '@babel/preset-env'],
-          },
-        },
+        use: jsLoaders()
       },
       {
         test: /\.(png|jpe?g|svg|gif)/,
@@ -114,7 +128,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.js', '.jsx', 'ts', 'tsx'],
   },
   optimization: optimization(),
   devServer: {
