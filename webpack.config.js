@@ -10,6 +10,8 @@ const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
+const sassRegex = /\.(scss|sass)$/;
+const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 const optimization = () => {
     const config = {
@@ -83,6 +85,26 @@ module.exports = {
   ],
   module: {
     rules: [
+      {
+        test: sassRegex,
+        exclude: sassModuleRegex,
+        use: getStyleLoaders(
+        {
+          importLoaders: 3,
+        },
+        'sass-loader'
+        )
+      },
+      {
+        test: sassModuleRegex,
+        use: getStyleLoaders(
+          {
+            importLoaders:3,
+            modules: true
+          },
+          'sass-loader'
+        )
+      },
       {
         test: cssRegex,
         exclude: cssModuleRegex,
