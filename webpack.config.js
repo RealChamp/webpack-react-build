@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin')
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -36,10 +36,11 @@ const optimization = () => {
   return config;
 };
 
+
 const getStyleLoaders = (options) => {
   const loaders = [
-    {
-      loader: MiniCssExtractPlugin.loader,
+    isDev ? 'style-loader' : {
+      loader:MiniCssExtractPlugin.loader,
       options: {
         hmr: isDev,
         reloadAll: isDev,
@@ -82,6 +83,9 @@ module.exports = {
         removeComments: isProd,
       },
     }),
+    // new CopyWebpackPlugin({
+    //   patterns: [{ from: path.resolve(__dirname, 'src/images'), to: path.resolve(__dirname, 'dist') }],
+    // }),
     new CleanWebpackPlugin(),
   ],
   module: {
