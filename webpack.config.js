@@ -63,7 +63,7 @@ const getStyleLoaders = (options) => {
 
 module.exports = {
   entry: {
-    main: './src/index.js',
+    main: './src/index.tsx',
   },
   output: {
     filename: '[name].[hash].js',
@@ -74,7 +74,8 @@ module.exports = {
       filename: '[name].[hash].css',
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './public/index.html',
+      favicon: './public/favicon.ico',
       inject: true,
       minify: {
         collapseWhitespace: isProd,
