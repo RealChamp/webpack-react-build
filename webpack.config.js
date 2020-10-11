@@ -1,37 +1,40 @@
-const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin')
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
-const TerserWebpackPlugin = require('terser-webpack-plugin')
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 // const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-const isDev = process.env.NODE_ENV === 'development'
-const isProd = !isDev
+const isDev = process.env.NODE_ENV === 'development';
+const isProd = !isDev;
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 const optimization = () => {
-    const config = {
-      splitChunks: {
-        chunks: 'all',
-      },
-    };
-    if (isProd) {
-      config.minimizer = [new OptimizeCssAssetsWebpackPlugin(), new TerserWebpackPlugin({
-          extractComments: false,
-          terserOptions: {
-            output: {
-              comments: false
-            }
-          }
-      })];
-    }
+  const config = {
+    splitChunks: {
+      chunks: 'all',
+    },
+  };
+  if (isProd) {
+    config.minimizer = [
+      new OptimizeCssAssetsWebpackPlugin(),
+      new TerserWebpackPlugin({
+        extractComments: false,
+        terserOptions: {
+          output: {
+            comments: false,
+          },
+        },
+      }),
+    ];
+  }
 
-    return config
-}
+  return config;
+};
 
 const getStyleLoaders = (options) => {
   const loaders = [
@@ -44,22 +47,19 @@ const getStyleLoaders = (options) => {
     },
     {
       loader: 'css-loader',
-      options: options
+      options: options,
     },
     {
       loader: 'postcss-loader',
       options: {
         postcssOptions: {
-          plugins: [
-            'autoprefixer'
-          ]
-        }
-      }
-    }
-  ]
-  return loaders
-}
-
+          plugins: ['autoprefixer'],
+        },
+      },
+    },
+  ];
+  return loaders;
+};
 
 module.exports = {
   entry: {
@@ -78,7 +78,7 @@ module.exports = {
       inject: true,
       minify: {
         collapseWhitespace: isProd,
-        removeComments: isProd
+        removeComments: isProd,
       },
     }),
     new CleanWebpackPlugin(),
@@ -89,34 +89,34 @@ module.exports = {
         test: sassRegex,
         exclude: sassModuleRegex,
         use: getStyleLoaders(
-        {
-          importLoaders: 3,
-        },
-        'sass-loader'
-        )
+          {
+            importLoaders: 3,
+          },
+          'sass-loader',
+        ),
       },
       {
         test: sassModuleRegex,
         use: getStyleLoaders(
           {
-            importLoaders:3,
-            modules: true
+            importLoaders: 3,
+            modules: true,
           },
-          'sass-loader'
-        )
+          'sass-loader',
+        ),
       },
       {
         test: cssRegex,
         exclude: cssModuleRegex,
         use: getStyleLoaders({
-          importLoaders: 1
-        })
+          importLoaders: 1,
+        }),
       },
       {
         test: cssModuleRegex,
         use: getStyleLoaders({
           modules: true,
-        })
+        }),
       },
       {
         test: /\.(js|jsx)/,
@@ -124,17 +124,20 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options:  {
-              presets: ['@babel/preset-env', '@babel/preset-react'],
-            }
+            options: {
+              presets: [
+                ['@babel/preset-env', { targets: { node: 'current' } }],
+                '@babel/preset-react',
+              ],
+            },
           },
-          'eslint-loader'
+          'eslint-loader',
         ],
       },
       {
         test: /\.(ts|tsx)/,
         use: 'ts-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.(png|jpe?g|svg|gif)/,
