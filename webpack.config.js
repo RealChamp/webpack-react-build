@@ -63,20 +63,13 @@ const getStyleLoaders = (options) => {
 };
 
 module.exports = {
-<<<<<<< HEAD
-=======
   devtool: isDev && 'eval-source-map',
->>>>>>> 7983fee... enable caching
   entry: {
     main: './src/index.tsx',
   },
   output: {
     filename: '[name].[hash].js',
     path: path.resolve(__dirname, 'dist'),
-<<<<<<< HEAD
-    publicPath: '/'
-=======
->>>>>>> 7983fee... enable caching
   },
   plugins: [
     new MiniCssExtractPlugin({
@@ -145,17 +138,12 @@ module.exports = {
               ],
             },
           },
-<<<<<<< HEAD
-          'eslint-loader',
-=======
           {
             loader: 'eslint-loader',
             options: {
               cache: true
             }
           },
-          
->>>>>>> 7983fee... enable caching
         ],
       },
       {
@@ -181,10 +169,6 @@ module.exports = {
     publicPath: '/',
     port: 3000,
     hot: isDev,
-<<<<<<< HEAD
-    historyApiFallback: true
-=======
     historyApiFallback: true,
->>>>>>> 7983fee... enable caching
   },
 };

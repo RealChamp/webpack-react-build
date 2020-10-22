@@ -40,21 +40,12 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "enzyme-to-json": "^3.6.1",
-<<<<<<< HEAD
-    "eslint": "^7.9.0",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-hooks": "^4.1.2",
-    "file-loader": "^6.1.0",
-    "html-webpack-plugin": "^4.4.1",
-=======
     "eslint": "^7.11.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.1.1",
     "html-webpack-plugin": "^4.5.0",
->>>>>>> 7983fee... enable caching
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.2",
     "jest-enzyme": "^7.1.2",
@@ -68,20 +59,11 @@
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^4.2.1",
     "ts-jest": "^26.4.1",
-<<<<<<< HEAD
-    "ts-loader": "^8.0.3",
-    "typescript": "^4.0.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.1.4"
-=======
     "ts-loader": "^8.0.6",
     "typescript": "^4.0.3",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
->>>>>>> 7983fee... enable caching
   },
   "browserslist": [
     "defaults",
