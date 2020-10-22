@@ -1,1 +1,1 @@
-# собственная сборка webpack для react приложений(typescript & jest included)
+# собственная сборка webpack для react приложений(typescript & jest included) v4
